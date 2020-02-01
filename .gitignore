@@ -1,0 +1,11 @@
+.DS_Store
+
+.env
+*.env
+
+mcserver/out
+.terraform
+
+apply
+infra.plan
+

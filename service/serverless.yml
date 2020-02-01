@@ -1,0 +1,59 @@
+service: service
+
+plugins:
+  - serverless-python-requirements
+  - serverless-offline
+
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${env:STAGE}
+  stackName: ${env:SERVICE_STACK_NAME}
+  region: ${env:AWS_REGION}
+  environment:
+    LOG_LEVEL: ${env:LOG_LEVEL,"INFO"}
+    AUTH_DOMAIN: ${env:AUTH_DOMAIN}
+    AUTH_AUDIENCE: ${env:AUTH_AUDIENCE}
+    AUTOSCALING_GROUP_NAME: ${env:AUTOSCALING_GROUP_NAME}
+    AUTOSCALING_GROUP_ARN: ${env:AUTOSCALING_GROUP_ARN}
+  iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "autoscaling:SetDesiredCapacity"
+        Resource:
+          - ${env:AUTOSCALING_GROUP_ARN}
+      - Effect: Allow
+        Action:
+          - "autoscaling:DescribeAutoScalingGroups"
+        Resource:
+          - "*"
+
+functions:
+  app:
+    handler: app.handler
+    events:
+      - http:
+          path: api/{path+}
+          method: any
+          cors: true
+      - http:
+          path: api
+          method: any
+          cors: true
+
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+  serverless-offline:
+    httpPort: 5000
+
+resources:
+  Outputs:
+    ServiceDomain:
+      Value: !Join [ ".", [
+        { "Ref": "ApiGatewayRestApi" },
+        "execute-api",
+        { "Ref": "AWS::Region" },
+        { "Ref": "AWS::URLSuffix" } ] ]

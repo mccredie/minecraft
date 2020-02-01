@@ -1,0 +1,10 @@
+{
+  "name": "service",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-offline": "^6.1.3",
+    "serverless-python-requirements": "^5.1.0"
+  }
+}
