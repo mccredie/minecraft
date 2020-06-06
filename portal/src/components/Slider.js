@@ -1,13 +1,13 @@
 
 import React from "react";
-import classNames from "classnames";
 
 import "./Slider.css"
 
-const Slider = ({active, onClick}) => {
-    return <div className={classNames("Slider", {active})} onClick={onClick}>
-        <div className="Slider-switch"></div>
-    </div>;
-};
+const Slider = ({checked, disabled, onChange}) => (
+    <label className="Slider" >
+      <input type="checkbox" checked={checked} disabled={disabled} onChange={(e) => onChange(e.target.value)} />
+      <span className="Slider-switch"></span>
+    </label>
+);
 
 export default Slider;

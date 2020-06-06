@@ -6,7 +6,7 @@ import NavBarComponent from  "~/components/NavBar";
 import { logout } from "~/authentication/operations";
 
 
-const NavBar = () => {
+const NavBar = ({ logout }) => {
   return (
       <NavBarComponent title={TITLE} logout={logout} />
   );

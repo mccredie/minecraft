@@ -4,8 +4,9 @@ import StateIndicator from "~/components/StateIndicator";
 
 const ServerStatus = ({active=false, state="terminated", onChangeActive}) => (
     <div>
-        <Slider active={active} onClick={() => onChangeActive(!active)} />
+        <Slider checked={active} onChange={() => onChangeActive(!active)}/>
         <StateIndicator state={state} />
+        <div>{state}</div>
     </div>
 );
 

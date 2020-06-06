@@ -42,6 +42,5 @@ export const login = () => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   const auth0Client = await authClientPromise;
-
-  return await auth0Client.logout();
+  return auth0Client.logout();
 };
