@@ -1,0 +1,12 @@
+
+.ServerStatus {
+  display: flex;
+  flex-flow: row wrap;
+  width: 650px;
+  margin: auto;
+}
+
+.ServerStatus-col {
+  flex: 1 0;
+  margin: 5px;
+}

@@ -1,0 +1,23 @@
+
+.Dashboard-status {
+  width: 650px;
+  margin: auto;
+}
+
+
+.Dashboard-statusHeader-border {
+  border: 10px solid;
+  border-image-slice: 1;
+  border-width: 0 0 5px 0;
+  border-image-source: linear-gradient(to left, #2376ae, #c16ecf);
+}
+
+.Dashboard-statusHeader {
+  display: flex;
+  flex-flow: wrap row;
+}
+
+.Dashboard-statusHeader-col {
+  flex: 1 0;
+  margin: 5px;
+}

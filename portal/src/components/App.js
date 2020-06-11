@@ -1,10 +1,9 @@
 import React, { useEffect }  from 'react';
 
 
-import NavBar from '../views/NavBar';
-import Dashboard from '../views/Dashboard';
-
-import './App.css';
+import NavBar from '~/views/NavBar';
+import Dashboard from '~/views/Dashboard';
+import Toast from '~/views/Toast';
 
 const App = ({ isLoading, login }) => {
   useEffect(() => {
@@ -23,6 +22,7 @@ const App = ({ isLoading, login }) => {
               <NavBar />
           </header>
           <Dashboard />
+          <Toast />
         </div>
     )
   }

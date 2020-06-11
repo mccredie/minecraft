@@ -4,10 +4,12 @@ import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 
 import authReducer from "~/authentication/state";
 import serviceReducer from "~/service/state";
+import toastReducer from "~/toast/state";
 
 const rootReducer = combineReducers({
   auth: authReducer,
   service: serviceReducer,
+  toast: toastReducer,
 })
 
 const initStore = () => createStore(
