@@ -2,8 +2,8 @@
 .Slider {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 2em;
+  height: 1em;
 }
 
 /* Hide default HTML checkbox */
@@ -27,7 +27,7 @@ input:disabled + .Slider-switch {
   /*background-color: #ccc;*/
   background-color: #c16ecf;
   transition: .4s;
-  border-radius: 34px;
+  border-radius: 1em;
 }
 
 input:checked:disabled + .Slider-switch {
@@ -42,10 +42,10 @@ input:checked + .Slider-switch {
 .Slider-switch:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
+  height: calc(1em - 4px);
+  width: calc(1em - 4px);
+  left: 2px;
+  bottom: 2px;
   background-color: white;
   transition: .4s;
   border-radius: 50%;
@@ -56,5 +56,5 @@ input:focus + .Slider-switch {
 }
 
 input:checked + .Slider-switch:before {
-  transform: translateX(26px);
+  transform: translateX(1em);
 }

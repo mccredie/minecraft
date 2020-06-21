@@ -216,3 +216,8 @@ resource "aws_cloudfront_distribution" "hosting_distribution" {
         ssl_support_method             = "sni-only"
     }
 }
+
+
+output "distribution_id" {
+  value = aws_cloudfront_distribution.hosting_distribution.id
+}

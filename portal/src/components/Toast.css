@@ -1,4 +1,14 @@
 
+.Toast-wrapper {
+  overflow: hidden;
+  position: absolute;
+  visibility: hidden;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .Toast {
   min-width: 300px;
   height: 100px;
@@ -8,13 +18,11 @@
   left: 50%;
   transform: translateX(-50%);
   padding: 0px 24px;
-  bottom: -300px;
   transition: bottom 0.5s cubic-bezier(0.5, -0.5, 0.5, 1.5);
-
-  border: 10px solid;
-  border-image-slice: 1;
-  border-width: 5px;
-  border-image-source: linear-gradient(to left, #2376ae, #c16ecf);
+  border: 5px solid #2376ae;
+  line-height: 90px; /* height - border * 2 */
+  bottom: -300px;
+  visibility: visible;
 }
 
 

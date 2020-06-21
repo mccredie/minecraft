@@ -51,3 +51,7 @@ module "cdn" {
 output "autoscaling_group_name" {
   value = module.mcserver.mc_autoscaling_group_name
 }
+
+output "cdn_distribution_id" {
+  value = module.cdn.distribution_id
+}

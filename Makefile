@@ -4,7 +4,7 @@ TF_FILES = $(wildcard *.tf) $(wildcard mcserver/*.tf)
 PROJECT_ROOT:=$(CURDIR)
 
 init:
-	terraform init -backend-config="bucket=${INFRA_BACKEND_BUCKET}"
+	terraform init -backend-config="bucket=$(INFRA_BACKEND_BUCKET)"
 .PHONY: init
 
 
@@ -15,11 +15,16 @@ infra.plan: $(shell find . -name '*.tf') $(shell find ./service -name '*.py')
 apply: infra.plan
 	terraform apply $< && openssl dgst -sha256 -out $@ $<
 
-portal/build: $(shell find portal/src -name '*.js')
+portal/build: $(shell find portal/src -name '*.js') $(shell find portal/src -name '*.css')
 	cd portal; npm run build && touch build
 
+invalidate_paths = /asset-manifest.json /favicon.ico /index.html /logo.png /manifest.json  /robots.txt /service-worker.js
+
 portal/upload: portal/build
-	cd portal; aws s3 sync --delete --exclude '**/*.map' build/ ${HOSTING_BUCKET}
+	cd portal; aws s3 sync --delete --exclude '**/*.map' build/ $(HOSTING_BUCKET) && \
+	  aws cloudfront create-invalidation \
+	    --distribution-id $(shell terraform output cdn_distribution_id) \
+	    --paths $(invalidate_paths)
 .PHONY: portal/upload
 
 
