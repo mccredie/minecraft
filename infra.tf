@@ -6,6 +6,7 @@ variable "stage" {}
 variable "auth_audience" {}
 variable "auth_domain" {}
 variable "certificate_arn" {}
+variable "server_prefix" {}
 
 
 data "aws_route53_zone" "hosted_zone" {
@@ -17,7 +18,8 @@ module "mcserver" {
   source = "./mcserver"
 
   access_key  = var.access_key
-  domain_name = "mc.${var.domain_name}"
+  server_prefix = var.domain_prefix
+  domain_name = var.domain_name
   hostedzone_id = data.aws_route53_zone.hosted_zone.zone_id
   minecraft_bucket = var.minecraft_bucket
 }
@@ -34,6 +36,7 @@ module "service" {
   autoscaling_group_arn = module.mcserver.mc_autoscaling_group_arn
   auth_audience = var.auth_audience
   auth_domain = var.auth_domain
+  server_domain = module.mcserver.server_domain
 }
 
 module "cdn" {

@@ -6,6 +6,10 @@
   margin: auto;
 }
 
+.ServerStatus .refresh {
+  cursor: pointer;
+}
+
 .ServerStatus-col {
   flex: 1 0;
   margin: 5px;

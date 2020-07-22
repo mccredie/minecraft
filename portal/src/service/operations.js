@@ -30,32 +30,34 @@ export const setServerActiveStatus = (active) => async (dispatch, getState) => {
   dispatch(setServiceState(await resp.json()));
 };
 
+const isServerStateStable = ({active, state}) => (
+    (active && state === 'InService') || (!active && state === null));
+
 export const refreshServerStatus = () => async (dispatch, getState) => {
-  for(;;) {
-      const accessToken = getAccessToken(getState());
-      let refreshTime = 150000;
-      try {
-        const resp = await fetchServerStatus(SERVICE_URL, accessToken);
-        if (resp.status ===  401 || resp.status === 403) {
-          dispatch(setAccessDenied(true));
-          dispatch(setStatusError(null));
-          return;
-        }
-        else {
-          const serviceState = await resp.json();
-          dispatch(setServiceState(serviceState));
-          dispatch(setAccessDenied(false));
-          dispatch(setStatusError(null));
-          if ((serviceState.active && serviceState.status !== 'InService')
-                || (!serviceState.active && serviceState.status !== null))
-          {
-              refreshTime = 10000;
-          }
-        }
-      } catch (error) {
-        console.error(error);
-        dispatch(setStatusError("Failure fetching status"));
-      }
-      await timeout(refreshTime);
+  const accessToken = getAccessToken(getState());
+  let serviceState;
+  try {
+    const resp = await fetchServerStatus(SERVICE_URL, accessToken);
+    if (resp.status ===  401 || resp.status === 403) {
+      dispatch(setAccessDenied(true));
+      dispatch(setStatusError(null));
+      return;
+    }
+    else {
+      serviceState = await resp.json();
+      dispatch(setServiceState(serviceState));
+      dispatch(setAccessDenied(false));
+      dispatch(setStatusError(null));
+    }
+  } catch (error) {
+    console.error(error);
+    dispatch(setStatusError("Failure fetching status"));
+    return;
+  }
+
+  if (!isServerStateStable(serviceState)) {
+      // If we are not in a stable state, do it again;
+      await timeout(10000);
+      dispatch(refreshServerStatus());
   }
 };

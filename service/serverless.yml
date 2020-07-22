@@ -17,6 +17,7 @@ provider:
     AUTH_AUDIENCE: ${env:AUTH_AUDIENCE}
     AUTOSCALING_GROUP_NAME: ${env:AUTOSCALING_GROUP_NAME}
     AUTOSCALING_GROUP_ARN: ${env:AUTOSCALING_GROUP_ARN}
+    SERVER_DOMAIN: ${env:SERVER_DOMAIN}
   iamRoleStatements:
       - Effect: Allow
         Action:

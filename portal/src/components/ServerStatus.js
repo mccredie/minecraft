@@ -1,15 +1,17 @@
 import React from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner, faSync } from '@fortawesome/free-solid-svg-icons'
 
 import Slider from "~/components/Slider";
 import Copyable from "~/views/Copyable";
 
 import "./ServerStatus.css";
 
-const ServerStatus = ({name, domain, canToggle, active=false, state=undefined, onChangeActive, showToast}) => (
+const ServerStatus = ({name, domain, canToggle, active=false, state=undefined, onChangeActive, showToast, onClickRefresh}) => (
     <div className="ServerStatus">
         <div className="ServerStatus-col">
+            <FontAwesomeIcon className="refresh" icon={faSync} onClick={onClickRefresh} />
+            {"  "}
             {name}
         </div>
         <div className="ServerStatus-col">
