@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 
 import Slider from "~/components/Slider";
 import Copyable from "~/views/Copyable";
@@ -11,6 +13,7 @@ const ServerStatus = ({name, domain, canToggle, active=false, state=undefined, o
             {name}
         </div>
         <div className="ServerStatus-col">
+            { !canToggle && <><FontAwesomeIcon icon={faSpinner} pulse /> {"  "} </> }
             <Slider disabled={!canToggle} checked={active} onChange={() => onChangeActive(!active)}/>
         </div>
         <div className="ServerStatus-col">

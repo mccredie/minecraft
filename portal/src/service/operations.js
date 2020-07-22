@@ -3,6 +3,7 @@ import { SERVICE_URL } from "~/config";
 
 import { setAccessDenied, setStatusError, setServiceState } from "~/service/actions";
 import { getAccessToken } from "~/authentication/selectors";
+import { timeout } from "~/utils/timeout";
 
 const fetchServerStatus = (root_url, accessToken) => (
   fetch(`${root_url}/servers/survival/status`, {
@@ -29,22 +30,32 @@ export const setServerActiveStatus = (active) => async (dispatch, getState) => {
   dispatch(setServiceState(await resp.json()));
 };
 
-
 export const refreshServerStatus = () => async (dispatch, getState) => {
-  const accessToken = getAccessToken(getState());
-  try {
-    const resp = await fetchServerStatus(SERVICE_URL, accessToken);
-    if (resp.status ===  401 || resp.status === 403) {
-      dispatch(setAccessDenied(true));
-      dispatch(setStatusError(null));
-    }
-    else {
-      dispatch(setServiceState(await resp.json()));
-      dispatch(setAccessDenied(false));
-      dispatch(setStatusError(null));
-    }
-  } catch (error) {
-    console.error(error);
-    dispatch(setStatusError("Failure fetching status"));
+  for(;;) {
+      const accessToken = getAccessToken(getState());
+      let refreshTime = 150000;
+      try {
+        const resp = await fetchServerStatus(SERVICE_URL, accessToken);
+        if (resp.status ===  401 || resp.status === 403) {
+          dispatch(setAccessDenied(true));
+          dispatch(setStatusError(null));
+          return;
+        }
+        else {
+          const serviceState = await resp.json();
+          dispatch(setServiceState(serviceState));
+          dispatch(setAccessDenied(false));
+          dispatch(setStatusError(null));
+          if ((serviceState.active && serviceState.status !== 'InService')
+                || (!serviceState.active && serviceState.status !== null))
+          {
+              refreshTime = 10000;
+          }
+        }
+      } catch (error) {
+        console.error(error);
+        dispatch(setStatusError("Failure fetching status"));
+      }
+      await timeout(refreshTime);
   }
 };
