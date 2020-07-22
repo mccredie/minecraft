@@ -49,7 +49,7 @@ ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "say SERVER SHUTTING DOWN. Sa
 ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "save-all"\015'
 ExecStop=/usr/bin/screen -p 0 -S mc -X eval 'stuff "stop"\015'
 ExecStop=/bin/sleep 10
-ExecStop=/usr/bin/aws s3 sync --delete "$${MC_HOME}" s3://hughminecraftbackups
+ExecStop=/usr/bin/aws s3 sync --delete "$${MC_HOME}" s3://${minecraft_bucket}
 
 
 Restart=on-failure
