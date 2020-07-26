@@ -25,6 +25,10 @@ variable "autoscaling_group_name" {
   type = string
 }
 
+variable "server_domain" {
+  type = string
+}
+
 data "aws_region" "current" {}
 
 resource "random_id" "stack_name" {
@@ -72,6 +76,7 @@ resource "null_resource" "serverless_app" {
       AUTOSCALING_GROUP_NAME = var.autoscaling_group_name
       AUTOSCALING_GROUP_ARN = var.autoscaling_group_arn
       SERVICE_STACK_NAME = local.stack_name
+      SERVER_DOMAIN = var.server_domain
     }
   }
 }

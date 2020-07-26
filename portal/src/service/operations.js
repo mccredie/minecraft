@@ -3,6 +3,7 @@ import { SERVICE_URL } from "~/config";
 
 import { setAccessDenied, setStatusError, setServiceState } from "~/service/actions";
 import { getAccessToken } from "~/authentication/selectors";
+import { timeout } from "~/utils/timeout";
 
 const fetchServerStatus = (root_url, accessToken) => (
   fetch(`${root_url}/servers/survival/status`, {
@@ -29,22 +30,34 @@ export const setServerActiveStatus = (active) => async (dispatch, getState) => {
   dispatch(setServiceState(await resp.json()));
 };
 
+const isServerStateStable = ({active, state}) => (
+    (active && state === 'InService') || (!active && state === null));
 
 export const refreshServerStatus = () => async (dispatch, getState) => {
   const accessToken = getAccessToken(getState());
+  let serviceState;
   try {
     const resp = await fetchServerStatus(SERVICE_URL, accessToken);
     if (resp.status ===  401 || resp.status === 403) {
       dispatch(setAccessDenied(true));
       dispatch(setStatusError(null));
+      return;
     }
     else {
-      dispatch(setServiceState(await resp.json()));
+      serviceState = await resp.json();
+      dispatch(setServiceState(serviceState));
       dispatch(setAccessDenied(false));
       dispatch(setStatusError(null));
     }
   } catch (error) {
     console.error(error);
     dispatch(setStatusError("Failure fetching status"));
+    return;
+  }
+
+  if (!isServerStateStable(serviceState)) {
+      // If we are not in a stable state, do it again;
+      await timeout(10000);
+      dispatch(refreshServerStatus());
   }
 };

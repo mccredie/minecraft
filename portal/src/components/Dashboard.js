@@ -12,12 +12,10 @@ const Dashboard = ({
     accessDenied,
     statusError
 }) => {
-    const handleChangeActiveStatus = (active) => setServerActiveStatus(active);
-
     useEffect(() => {
         refreshServerStatus();
     // eslint-disable-next-line
-    }, []);
+    }, [serviceState.active]);
 
     let errorComponent = null;
     let accessDeniedComponent = null;
@@ -40,7 +38,10 @@ const Dashboard = ({
                     <div className="Dashboard-statusHeader-col">Domain</div>
                 </div>
             </div>
-            <ServerStatus name="survival" domain="mc.dadleft4milk.com" {...serviceState} onChangeActive={handleChangeActiveStatus} />
+            <ServerStatus name="survival"
+                {...serviceState}
+                onClickRefresh={refreshServerStatus}
+                onChangeActive={setServerActiveStatus} />
         </div>
     </div>
 };

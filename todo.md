@@ -1,5 +1,5 @@
 
-- [ ] web page for seeing status
+- [x] web page for seeing status
 
 
 - [x] api to set desired capacity

@@ -3,9 +3,9 @@ import { combineReducers } from 'redux';
 import { makeSetReducer } from '~/utils/state';
 
 const reduce = combineReducers({
-    state: (state={ canToggle: false, state: "Unknown", active: false }, action) => {
+    state: (state={ canToggle: false, state: "Unknown", active: false, domain: "" }, action) => {
         if (action.type === "SERVER_STATUS/SET") {
-            const {state: status, active} = action.payload;
+            const {state: status, active, domain} = action.payload;
             let canToggle = false;
             if (active && status === "InService") {
                 canToggle = true;
@@ -17,7 +17,8 @@ const reduce = combineReducers({
             return {
                 state: status,
                 active,
-                canToggle
+                canToggle,
+                domain
             }
         }
         return state;

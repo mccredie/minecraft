@@ -18,6 +18,7 @@ AUTH_DOMAIN = os.environ['AUTH_DOMAIN']
 AUTH_AUDIENCE = os.environ['AUTH_AUDIENCE']
 
 AUTOSCALING_GROUP_NAME = os.environ['AUTOSCALING_GROUP_NAME']
+SERVER_DOMAIN = os.environ['SERVER_DOMAIN']
 
 # Root Logger
 logger = logging.getLogger()
@@ -42,7 +43,8 @@ def get_autoscaling_group_status(group_name):
 
     return {
         "active": capacity == 1,
-        "state": state
+        "state": state,
+        "domain": SERVER_DOMAIN,
     }
 
 router = Router()

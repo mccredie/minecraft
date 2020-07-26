@@ -1,4 +1,5 @@
 
+variable "server_prefix" {}
 variable "domain_name" {}
 variable "hostedzone_id" {}
 
@@ -47,7 +48,7 @@ resource "aws_lambda_function" "lifecycle_hook" {
   environment {
     variables = {
       HOSTED_ZONE_ID = var.hostedzone_id
-      DOMAIN_NAME = var.domain_name
+      DOMAIN_NAME = "${var.server_prefix}.${var.domain_name}"
     }
   }
 }
@@ -156,4 +157,8 @@ resource "aws_iam_role_policy" "lambda_execution_role_policy" {
     ]
 }
 EOF
+}
+
+output "server_domain" {
+  value = "${var.server_prefix}.${var.domain_name}"
 }
