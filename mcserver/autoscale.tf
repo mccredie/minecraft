@@ -246,3 +246,4 @@ output "mc_autoscaling_group_name" {
 output "mc_autoscaling_group_arn" {
   value = aws_autoscaling_group.bar.arn
 }
+

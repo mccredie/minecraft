@@ -159,6 +159,6 @@ resource "aws_iam_role_policy" "lambda_execution_role_policy" {
 EOF
 }
 
-output "server_domain" = {
+output "server_domain" {
   value = "${var.server_prefix}.${var.domain_name}"
 }

@@ -18,7 +18,7 @@ module "mcserver" {
   source = "./mcserver"
 
   access_key  = var.access_key
-  server_prefix = var.domain_prefix
+  server_prefix = var.server_prefix
   domain_name = var.domain_name
   hostedzone_id = data.aws_route53_zone.hosted_zone.zone_id
   minecraft_bucket = var.minecraft_bucket
