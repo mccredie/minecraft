@@ -18,6 +18,8 @@ provider:
     AUTOSCALING_GROUP_NAME: ${env:AUTOSCALING_GROUP_NAME}
     AUTOSCALING_GROUP_ARN: ${env:AUTOSCALING_GROUP_ARN}
     SERVER_DOMAIN: ${env:SERVER_DOMAIN}
+    DYNAMODB_BY_USER_INDEX: ${env:DYNAMODB_BY_USER_INDEX}
+    DYNAMODB_SERVICE_TABLE_ID: ${env:DYNAMODB_SERVICE_TABLE_ID}
   iamRoleStatements:
       - Effect: Allow
         Action:
@@ -29,6 +31,13 @@ provider:
           - "autoscaling:DescribeAutoScalingGroups"
         Resource:
           - "*"
+      - Effect: Allow
+        Action:
+          - "dynamodb:*Item"
+          - "dynamodb:Query"
+          - "dynamodb:Scan"
+        Resource:
+          - ${env:DYNAMODB_SERVICE_TABLE_ARN}
 
 functions:
   app:

@@ -25,27 +25,8 @@ logger = logging.getLogger()
 logger.setLevel(LOG_LEVEL)
 
 autoscaling = boto3.client("autoscaling")
-
 status_route = re.compile(r'/api/servers/survival/status')
 
-
-def get_autoscaling_group_status(group_name):
-    response = autoscaling.describe_auto_scaling_groups(
-        AutoScalingGroupNames=[group_name],
-    )
-    desc = response['AutoScalingGroups'][0]
-    capacity = desc['DesiredCapacity']
-    instances = desc['Instances']
-    if instances:
-        state = instances[0]['LifecycleState']
-    else:
-        state = None
-
-    return {
-        "active": capacity == 1,
-        "state": state,
-        "domain": SERVER_DOMAIN,
-    }
 
 router = Router()
 router.decorators = [
@@ -55,6 +36,7 @@ router.decorators = [
     handle_errors,
     require_auth(AUTH_DOMAIN, AUTH_AUDIENCE),
 ]
+
 
 @router.route(re.compile(r'^/api/servers/survival/status').match)
 def app(event, context):
@@ -102,17 +84,22 @@ def app(event, context):
             }
         }
 
+def get_autoscaling_group_status(group_name):
+    response = autoscaling.describe_auto_scaling_groups(
+        AutoScalingGroupNames=[group_name],
+    )
+    desc = response['AutoScalingGroups'][0]
+    capacity = desc['DesiredCapacity']
+    instances = desc['Instances']
+    if instances:
+        state = instances[0]['LifecycleState']
+    else:
+        state = None
+
+    return {
+        "active": capacity == 1,
+        "state": state,
+        "domain": SERVER_DOMAIN,
+    }
+
 handler = router.handler
-
-
-#return {
-#    "isBase64Encoded": False,
-#    "statusCode": 404,
-#    "headers": {},
-#    "body": {
-#        "error": "Not Found",
-#        "message": "Requested resource not found",
-#        "code": 404,
-#    }
-#}
-

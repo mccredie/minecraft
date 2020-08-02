@@ -9,19 +9,21 @@
 - [x] save game to s3 on exit
 - [x] scale down when nobody connected
 - [x] spot instances
-
-# near future
-
-- api service to see status and activate server
+- [x] api service to see status and activate server
   + token validation
   + get server status
   + activate server
-
-- web page to view status and enable server
+- [x] web page to view status and enable server
   + hosting via S3 and cloud-front
   + implicit flow log-in
   + page to view status
   + button / input to modify server status
+
+# near future
+- Configure server version and worlds
+ + ability to have multiple server versions, and update them
+ + ability to associate a world with a server version
+
 
 # Longer
 

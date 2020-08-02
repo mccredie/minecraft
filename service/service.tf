@@ -42,6 +42,7 @@ resource "random_id" "stack_name" {
 
 locals {
   stack_name = "service-${var.stage}-${random_id.stack_name.hex}"
+  dynamodb_by_user_index = "ByUserIndex"
 }
 
 module "files-changed" {
@@ -77,8 +78,43 @@ resource "null_resource" "serverless_app" {
       AUTOSCALING_GROUP_ARN = var.autoscaling_group_arn
       SERVICE_STACK_NAME = local.stack_name
       SERVER_DOMAIN = var.server_domain
+      DYNAMODB_BY_USER_INDEX = local.dynamodb_by_user_index
+      DYNAMODB_SERVICE_TABLE_ID = aws_dynamodb_table.service_table.id
+      DYNAMODB_SERVICE_TABLE_ARN = aws_dynamodb_table.service_table.arn
     }
   }
+}
+
+resource "random_id" "by_id_table_name" {
+  prefix      = "ByIdTable"
+  byte_length = 8
+}
+
+resource "aws_dynamodb_table" "service_table" {
+  name           = random_id.by_id_table_name.b64_url
+  billing_mode   = "PAY_PER_REQUEST"
+  hash_key       = "Id"
+
+  attribute {
+    name = "Id"
+    type = "S"
+  }
+
+  attribute {
+    name = "User"
+    type = "S"
+  }
+
+  global_secondary_index {
+    name           = local.dynamodb_by_user_index
+    hash_key       = "User"
+    range_key      = "Id"
+    projection_type    = "ALL"
+  }
+}
+
+output "dynamodb_service_table_name" {
+  value = random_id.by_id_table_name.b64_url
 }
 
 output "stack_name" {
