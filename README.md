@@ -21,6 +21,14 @@ Server - refers to the server program including version. For example 'Vanilla Mi
 Domain - The name that is used to host a unique instance of a minecraft server.  Assuming this service is hosted at 'myminecraft.com' and you launch a server using the domain 'mysurvival' then you can access the server using the domain name 'mysurvival.myminecraft.com'.  This also the endpoint used to get information about the currently running instances.
 
 
+/api/{user-id}/domains - list of domains for user with user-id
+/api/{user-id}/domains/{domain-id} - domain object
+/api/{user-id}/servers - list of servers
+/api/{user-id}/servers/{name} - server-object
+
+
+should I start a server with a domain, or start a domain with a server
+How do I detect if a server is already running?
 
 
 /api/domains/ - list domains

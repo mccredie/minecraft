@@ -1,7 +1,9 @@
 #!/bin/sh -e
 
 sudo yum remove -y java-1.7.0-openjdk.x86_64
-sudo yum install -y java-1.8.0-openjdk.x86_64
+sudo rpm --import https://yum.corretto.aws/corretto.key
+sudo curl -L -o /etc/yum.repos.d/corretto.repo https://yum.corretto.aws/corretto.repo
+sudo yum install -y java-16-amazon-corretto-devel
 
 MC_HOME=/opt/minecraft
 MC_USER=minecraft
@@ -41,7 +43,7 @@ ProtectHome=true
 # It is hence recommended to turn this on for most services.
 # Implies MountAPIVFS=yes
 
-ExecStart=/bin/sh -c '/usr/bin/screen -DmS mc /usr/bin/java -server -Xms512M -Xmx2048M -XX:+UseG1GC -XX:+CMSIncrementalPacing -XX:+CMSClassUnloadingEnabled -XX:ParallelGCThreads=2 -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -jar /opt/minecraft/server.jar nogui'
+ExecStart=/bin/sh -c '/usr/bin/screen -DmS mc /usr/bin/java -server -Xms512M -Xmx2048M -XX:ParallelGCThreads=2 -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -jar /opt/minecraft/server.jar nogui'
 
 ExecReload=/usr/bin/screen -p 0 -S mc -X eval 'stuff "reload"\015'
 
